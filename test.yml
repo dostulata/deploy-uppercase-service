@@ -1,0 +1,27 @@
+---
+- hosts: 192.168.50.1
+  tasks:
+
+  - name: Install nodejs
+    apt: name=nodejs update_cache=yes
+    sudo: yes
+
+  - name: Install git
+    apt: name=git update_cache=yes
+    sudo: yes
+
+  - name: Install screen
+    apt: name=screen update_cache=yes
+    sudo: yes
+  
+  - command: /bin/mkdir ~/deploy
+    args:
+        creates: ~/deploy
+  - command: git clone https://github.com/dostulata/uppercase-service.git ./
+    args:
+        chdir: ~/deploy/
+
+  - name: Starting Uppercase-service
+    shell: "screen -A -m -d -S nodesession /usr/bin/nodejs ~/deploy/index.js"
+    args:
+        executable: "/bin/bash"
